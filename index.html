@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bot Portal</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0f14;
+      color: #f5f7fa;
+    }
+    .wrap { max-width: 900px; margin: auto; padding: 24px 16px 50px; }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin-bottom: 28px;
+    }
+    h1 { margin: 0; font-size: 28px; }
+    .sub { color: #9aa4b2; margin-top: 6px; }
+    button {
+      border: 0; border-radius: 12px; padding: 12px 16px;
+      font-weight: 700; cursor: pointer; background: #fff; color: #111;
+    }
+    .stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      margin-bottom: 22px;
+    }
+    .stat, .bot {
+      background: #121821; border: 1px solid #202a36;
+      border-radius: 18px;
+    }
+    .stat { padding: 18px; }
+    .stat strong { display: block; font-size: 25px; margin-top: 7px; }
+    .label { color: #9aa4b2; font-size: 13px; }
+    .bots { display: grid; gap: 14px; }
+    .bot { padding: 18px; display: flex; align-items: center; gap: 14px; }
+    .avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      display: grid; place-items: center; background: #202b38; font-size: 24px;
+      flex: 0 0 auto;
+    }
+    .info { flex: 1; min-width: 0; }
+    .name { font-size: 17px; font-weight: 700; }
+    .username { color: #8f9baa; margin-top: 4px; }
+    .status { font-size: 13px; margin-top: 8px; font-weight: 700; }
+    .online { color: #55d98a; }
+    .offline { color: #ff6f7d; }
+    .empty {
+      text-align: center; padding: 36px 16px; color: #9aa4b2;
+      border: 1px dashed #293544; border-radius: 18px;
+    }
+    footer { text-align: center; color: #687586; margin-top: 28px; font-size: 12px; }
+    @media (max-width: 600px) {
+      header { align-items: flex-start; flex-direction: column; }
+      header button { width: 100%; }
+      .stats { grid-template-columns: 1fr; }
+      .bot { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div>
+        <h1>🤖 Bot Portal</h1>
+        <div class="sub">Your Telegram bots, all in one place.</div>
+      </div>
+      <button onclick="connectBot()">＋ Connect Bot</button>
+    </header>
+
+    <section class="stats">
+      <div class="stat"><span class="label">Total Bots</span><strong id="total">0</strong></div>
+      <div class="stat"><span class="label">Active</span><strong id="active">0</strong></div>
+      <div class="stat"><span class="label">Offline</span><strong id="offline">0</strong></div>
+    </section>
+
+    <section id="bots" class="bots"></section>
+
+    <footer>Bot Portal V1 • Secure connection system coming next</footer>
+  </main>
+
+  <script>
+    // Demo data only. No Telegram tokens are stored here.
+    const bots = [
+      { name: "SUKUNA MD", username: "@Onyxtwinuserbot", status: "online" },
+      { name: "Underworld UserBot", username: "@Underworlduserbot", status: "offline" }
+    ];
+
+    function render() {
+      const area = document.getElementById("bots");
+      const active = bots.filter(b => b.status === "online").length;
+      document.getElementById("total").textContent = bots.length;
+      document.getElementById("active").textContent = active;
+      document.getElementById("offline").textContent = bots.length - active;
+
+      if (!bots.length) {
+        area.innerHTML = '<div class="empty">No bots connected yet.<br>Tap “Connect Bot” to add one.</div>';
+        return;
+      }
+
+      area.innerHTML = bots.map(bot => `
+        <article class="bot">
+          <div class="avatar">🤖</div>
+          <div class="info">
+            <div class="name">${escapeHtml(bot.name)}</div>
+            <div class="username">${escapeHtml(bot.username)}</div>
+            <div class="status ${bot.status === "online" ? "online" : "offline"}">
+              ${bot.status === "online" ? "● Active" : "● Offline"}
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function connectBot() {
+      alert("The secure Connect Bot system will be added in the next version. Do not enter a Telegram bot token on this page yet.");
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, c => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+      }[c]));
+    }
+
+    render();
+  </script>
+</body>
+</html>
